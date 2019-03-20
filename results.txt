@@ -1,0 +1,24 @@
+> css
+
+ 95 % credible set of rate shift configurations sampled with BAMM
+
+Distinct shift configurations in credible set:  5
+
+Frequency of 5 shift configurations with highest posterior probability:
+
+
+   rank     probability cumulative  Core_shifts
+         1 0.32157139  0.3215714          1
+         2 0.28722653  0.6087979          2
+         3 0.19948247  0.8082804          2
+         4 0.11808986  0.9263703          2
+         5 0.05716302  0.9835333          0
+
+> best$eventData
+[[1]]
+  node    time      lam1         lam2       mu1 mu2 index
+1  141  0.0000 0.1980632  0.035941887 0.1911411   0     1
+2  222 33.1892 0.6759441 -0.008735938 0.1176511   0     2
+
+
+
