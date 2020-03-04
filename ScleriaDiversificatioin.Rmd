@@ -65,6 +65,88 @@ text(x=30, y= 0.8, label="core Hypoporum", font=4, cex=1.0, pos=4)
 plotRateThroughTime(edata, intervalCol="darkgreen", avgCol="darkgreen", start.time=st, node=222, nodetype = "exclude", ylim=c(0,1), cex.axis=1,ratetype='netdiv')
 text(x=30, y= 0.8, label="Excluding core Hypoporum", font=4, cex=1.0, pos=4)
 
+#OHER OPTIONS
+sc <- distinctShiftConfigurations(edata, expectedNumberOfShifts = 1, threshold = 5)
+
+phylorates <- plot(edata, breaksmethod='jenks', show = FALSE)
+pdffn = paste0("bamm", ".histogram.pdf")
+pdf(file=pdffn, width=6, height=6)
+ratesHistogram(phylorates, plotBrks = FALSE, xlab = 'diversification rates')
+dev.off()
+
+
+msc_tree <- maximumShiftCredibility(edata)
+pdffn = paste0("bamm", ".maximumShiftCredibility2.pdf")
+pdf(file=pdffn, width=6, height=6)
+plot(edata)
+addBAMMshifts(edata, method='phylogram', index=msc_tree$sampleindex)
+axisPhylo()
+dev.off()
+
+
+par(mfrow=c(1,1))
+pdffn = paste0("bamm", ".coreshiftconfiguration461.pdf")
+pdf(file=pdffn, width=8, height=18)
+plot(sc, edata, index = 461)
+axisPhylo()
+dev.off()
+
+
+par(mfrow=c(1,1))
+pdffn = paste0("bamm", ".coreshiftconfiguration1376.pdf")
+pdf(file=pdffn, width=8, height=18)
+plot(sc, edata, index = 1376)
+axisPhylo()
+dev.off()
+
+
+#second best configuaration
+
+set <- 2
+goodindices <- css$indices[[set]]
+subb <- subsetEventData(edata, index = goodindices)
+
+#Object subb is now a bammdata object, and you can do any other bammdata operation. 
+#For example, if you want mean rates across an entire tree, you could do:
+
+zz <- getCladeRates(subb)
+mean(zz$lambda)
+
+#In this example, the relevant shift node is "140". You can see this as follows:
+
+css$shiftnodes[[set]]
+
+#Hence, you could pull out the mean clade-wise rates for all branches in the clade descended
+#from this node as follows:
+
+clade1 <- getCladeRates(subb, node = 148)
+clade2 <- getCladeRates(subb, node = 222)
+
+#And here is the background rate:
+
+background <- getCladeRates(subb, node = c(141,148,222), nodetype = c("include","exclude","exclude"))
+
+# Now: pull out the rate distributions for the "shift" clade and the background lineages,
+# and summarize them with the quantile function:
+
+mean(clade1$lambda)
+mean(clade2$lambda)
+mean(background$lambda)
+mean(clade1$mu)
+mean(clade2$mu)
+mean(background$mu)
+
+par(mfrow=c(1,1))
+best2 <- getBestShiftConfiguration(subb, expectedNumberOfShifts=1)
+best2
+plot.bammdata(best2, lwd = 2,spex = "netdiv",label=T,cex=0.5)
+axisPhylo()
+addBAMMshifts(best2, cex=3)
+best2$eventData
+
+
+
+
 
 
 ```
